@@ -1,0 +1,15 @@
+.stickmap {
+  background-color: lightgray;
+  margin-bottom: 3rem;
+  height: auto;
+  width: 50%;
+}
+
+.stickmap__title {
+  color: maroon;
+}
+
+.fret {
+  margin: 0;
+  line-height: .7;
+}

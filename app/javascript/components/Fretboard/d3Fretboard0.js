@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const x = d3.scaleBand()
 		.domain(data[0].strings.map(item => item + 1)) // array of string #s for x domain
 		.range([0, graphWidth]) // range within overall graph width
-		.paddingInner(0.9)
+		.paddingInner(0.1)
 		.paddingOuter(0.2);
 
 	// find existing and append virtual rects to graph now, instead of svg, to incorporate graph grouping
@@ -55,21 +55,18 @@ window.addEventListener('DOMContentLoaded', () => {
 	rects.attr('width', x.bandwidth)
 		.attr('height', d => graphHeight - y(d.frets.length))
 		.attr('fill', d => d.color)
-		.attr('stroke', 'red')
-		.attr('x', (d, i) => x(d.strings[i]))
+		.attr('stroke', 'black')
+		.attr('x', d => x(d.strings))
 		.attr('y', d => y(d.frets.length));
-
-	console.log('rects: ', rects)
 
 	// create and append virtual rects to graph, instead of svg, to incorporate graph grouping
 	rects.enter()
 		.append('rect')
 		.attr('width', x.bandwidth) // width determined by svg width diveded by numer of items in x.domain
 		.attr('height', d => graphHeight - y(d.frets.length)) // height of bar only, does not place it up or down vertically
-		.attr('fill', 'green')
-		.attr('stroke', 'red')
-		// .attr('x', (d, i) => x(d.strings[i] + 1))   // name attr is index on array derived in x BAND scale; returns a number
-		.attr('x', (d, i) => x(d.strings[i] + 1))   // name attr is index on array derived in x BAND scale; returns a number
+		.attr('fill', d => d.color)
+		.attr('stroke', 'black')
+		.attr('x', d => x(d.string))   // name attr is index on array derived in x BAND scale; returns a number
 		.attr('y', d => y(d.frets.length)); // votes attr is index on array derived in y LINEAR; returns a numb
 
 

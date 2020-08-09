@@ -1,6 +1,10 @@
-import * as d3 from "d3"
+import * as d3 from 'd3'
+import fretboardData from '../../components/fretboardData/fretboardData'
 
 window.addEventListener('DOMContentLoaded', () => {
+
+	console.log('fretboardData: ', fretboardData)
+	const data = fretboardData
 
 	// svg variable is placed using a div and class css selector
 	const svg = d3.select('.stickmap')
@@ -20,37 +24,15 @@ window.addEventListener('DOMContentLoaded', () => {
 		.attr('height', graphHeight)
 		.attr('transform', `translate(${margin.left}, ${margin.top})`)
 
+	console.log('graphWidth: ', graphWidth)
+	console.log('graphHeight: ', graphHeight)
+
 	// axis
 	const xAxisGroup = graph.append('g')
 		.attr('transform', `translate(0, ${graphHeight})`)
 
 	const yAxisGroup = graph.append('g')
 
-	// fretboard data for 10 string railboard, standard tuning, with melody matching lowest bass string
-	// frets: ['27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1'],
-	const data = [
-		{
-			id: 1,
-			frets: [27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
-			notes: ['A', 'A#', 'Bb', 'B', 'B#', 'Cb', 'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'E#', 'Fb', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab'],
-			strings: [...Array(10).keys()]
-		},
-		{
-			id: 2,
-			frets: [27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
-			notes: ['A', 'A#', 'Bb', 'B', 'B#', 'Cb', 'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'E#', 'Fb', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab'],
-			strings: [...Array(10).keys()]
-		},
-		{
-			id: 3,
-			frets: [27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
-			notes: ['A', 'A#', 'Bb', 'B', 'B#', 'Cb', 'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'E#', 'Fb', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab'],
-			strings: [...Array(10).keys()]
-		}
-	]
-
-	console.log('data: ', data)
-	console.log('graphHeight: ', graphHeight)
 	// set y domain using min/max of data.frets attribute
 	// set y range using graphHeight(calculated above) and 0 
 	const y = d3.scaleLinear()
@@ -71,21 +53,21 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// bind existing rects to graph, instead of svg, to incorporate graph grouping
 	rects.attr('width', x.bandwidth)
-		.attr('height', d => graphHeight - y(d.frets))
+		.attr('height', d => graphHeight - y(d.frets.length))
 		.attr('fill', d => d.color)
 		.attr('stroke', 'black')
 		.attr('x', d => x(d.strings))
-		.attr('y', d => y(d.frets));
+		.attr('y', d => y(d.frets.length));
 
 	// create and append virtual rects to graph, instead of svg, to incorporate graph grouping
 	rects.enter()
 		.append('rect')
 		.attr('width', x.bandwidth) // width determined by svg width diveded by numer of items in x.domain
-		.attr('height', d => graphHeight - y(d.frets)) // height of bar only, does not place it up or down vertically
+		.attr('height', d => graphHeight - y(d.frets.length)) // height of bar only, does not place it up or down vertically
 		.attr('fill', d => d.color)
 		.attr('stroke', 'black')
 		.attr('x', d => x(d.string))   // name attr is index on array derived in x BAND scale; returns a number
-		.attr('y', d => y(d.frets)); // votes attr is index on array derived in y LINEAR; returns a numb
+		.attr('y', d => y(d.frets.length)); // votes attr is index on array derived in y LINEAR; returns a numb
 
 
 	// create and call the axes

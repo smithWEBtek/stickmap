@@ -1,10 +1,12 @@
 import * as d3 from 'd3'
-import fretboardData from '../../components/fretboardData/fretboardData'
+import { fretboardData } from '../../components/fretboardData/fretboardData'
+import { cmajor } from '../../components/fretboardData/fretboardData'
 
 window.addEventListener('DOMContentLoaded', () => {
 
 	console.log('fretboardData: ', fretboardData)
 	const data = fretboardData
+	const chord = cmajor
 
 	// svg variable is placed using a div and class css selector
 	const svg = d3.select('.stickmap')
@@ -14,7 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		.attr('margin-left', 20);
 
 	// create margins on dimensions
-	const margin = { top: 20, right: 0, bottom: 50, left: 50 };
+	const margin = { top: 20, right: 0, bottom: 50, left: 70 };
 	const graphWidth = 400 - margin.left - margin.right;
 	const graphHeight = 600 - margin.top - margin.bottom;
 
@@ -33,16 +35,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const yAxisGroup = graph.append('g')
 
-	// set y domain using min/max of data.frets attribute
+	// set y domain using min/max of 0 to 27
 	// set y range using graphHeight(calculated above) and 0 
 	const y = d3.scaleLinear()
-		.domain([0, d3.max(data[0].frets)])
+		.domain([0, 27])
 		.range([graphHeight, 0]);
 
 	const x = d3.scaleBand()
-		.domain(data[0].strings.map(item => item + 1)) // array of string #s for x domain
+		.domain(data.map((d, i) => i + 1)) // array of string #s for x domain
 		.range([0, graphWidth]) // range within overall graph width
-		.paddingInner(0.9)
+		.paddingInner(0.93)
 		.paddingOuter(0.2);
 
 	// find existing and append virtual rects to graph now, instead of svg, to incorporate graph grouping
@@ -53,25 +55,31 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// bind existing rects to graph, instead of svg, to incorporate graph grouping
 	rects.attr('width', x.bandwidth)
-		.attr('height', d => graphHeight - y(d.frets.length))
+		.attr('height', d => graphHeight - y(27))
 		.attr('fill', d => d.color)
-		.attr('stroke', 'red')
-		.attr('x', (d, i) => x(d.strings[i]))
-		.attr('y', d => y(d.frets.length));
+		.attr('stroke', 'black')
+		.attr('x', (d, i) => x(i))
+		.attr('y', d => y(27));
+
 
 	console.log('rects: ', rects)
-
 	// create and append virtual rects to graph, instead of svg, to incorporate graph grouping
 	rects.enter()
 		.append('rect')
 		.attr('width', x.bandwidth) // width determined by svg width diveded by numer of items in x.domain
-		.attr('height', d => graphHeight - y(d.frets.length)) // height of bar only, does not place it up or down vertically
-		.attr('fill', 'green')
-		.attr('stroke', 'red')
-		// .attr('x', (d, i) => x(d.strings[i] + 1))   // name attr is index on array derived in x BAND scale; returns a number
-		.attr('x', (d, i) => x(d.strings[i] + 1))   // name attr is index on array derived in x BAND scale; returns a number
-		.attr('y', d => y(d.frets.length)); // votes attr is index on array derived in y LINEAR; returns a numb
+		.attr('height', d => graphHeight - y(27)) // height of bar only, does not place it up or down vertically
+		.attr('fill', 'gray')
+		.attr('x', (d, i) => x(i + 1))   // name attr is index on array derived in x BAND scale; returns a number
+		.attr('y', d => y(27)) // votes attr is index on array derived in y LINEAR; returns a numb
 
+	// add a hard coded circle to display
+	svg.append('circle')
+		.data(data)
+		.attr('r', 5)
+		.attr('cx', (d, i) => i + 80)
+		.attr('cy', (d, i) => i + 400)
+		.attr('fill', 'lightblue')
+		.attr('stroke', 'navy').append('circ')
 
 	// create and call the axes
 	const xAxis = d3.axisBottom(x)

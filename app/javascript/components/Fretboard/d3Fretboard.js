@@ -4,11 +4,13 @@ import { cmajor } from '../../components/fretboardData/fretboardData'
 
 window.addEventListener('DOMContentLoaded', () => {
 
-	console.log('fretboardData: ', fretboardData)
 	const data = fretboardData
 	const chord = cmajor
+	console.log('data: ', data)
+	console.log('chord: ', chord)
 
 	// svg variable is placed using a div and class css selector
+	// const svg = d3.select('.stickmap')
 	const svg = d3.select('.stickmap')
 		.append('svg')
 		.attr('width', 400)
@@ -26,17 +28,14 @@ window.addEventListener('DOMContentLoaded', () => {
 		.attr('height', graphHeight)
 		.attr('transform', `translate(${margin.left}, ${margin.top})`)
 
-	console.log('graphWidth: ', graphWidth)
-	console.log('graphHeight: ', graphHeight)
-
 	// axis
 	const xAxisGroup = graph.append('g')
 		.attr('transform', `translate(0, ${graphHeight})`)
 
 	const yAxisGroup = graph.append('g')
 
+	// set x range using graphHeight(calculated above) and 0 
 	// set y domain using min/max of 0 to 27
-	// set y range using graphHeight(calculated above) and 0 
 	const y = d3.scaleLinear()
 		.domain([0, 27])
 		.range([graphHeight, 0]);
@@ -54,24 +53,29 @@ window.addEventListener('DOMContentLoaded', () => {
 		.data(data)
 
 	// bind existing rects to graph, instead of svg, to incorporate graph grouping
-	rects.attr('width', x.bandwidth)
-		.attr('height', d => graphHeight - y(27))
-		.attr('fill', d => d.color)
-		.attr('stroke', 'black')
+	rects.append('rect')
+		.attr('width', x.bandwidth)
+		// .attr('height', d => graphHeight - y(27))
+		// .attr('height', graphHeight - y(27))
+		.attr('height', graphHeight)
+		.attr('fill', 'red')
+		.attr('stroke', 'red')
 		.attr('x', (d, i) => x(i))
 		.attr('y', d => y(27));
 
 
-	console.log('rects: ', rects)
-	// create and append virtual rects to graph, instead of svg, to incorporate graph grouping
+	console.log('Selection rects: ', rects)
+	// debugger;
 	rects.enter()
 		.append('rect')
-		.attr('width', x.bandwidth) // width determined by svg width diveded by numer of items in x.domain
-		.attr('height', d => graphHeight - y(27)) // height of bar only, does not place it up or down vertically
+		.attr('width', x.bandwidth)
+		.attr('height', graphHeight)
 		.attr('fill', 'gray')
-		.attr('x', (d, i) => x(i + 1))   // name attr is index on array derived in x BAND scale; returns a number
-		.attr('y', d => y(27)) // votes attr is index on array derived in y LINEAR; returns a numb
+		.attr('stroke', 'black')
+		.attr('x', (d, i) => x(i + 1))
+		.attr('y', d => y(27))
 
+	console.log('EnterSelection rects: ', rects)
 	// add a hard coded circle to display
 	svg.append('circle')
 		.data(data)

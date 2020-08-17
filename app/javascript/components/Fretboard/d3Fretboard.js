@@ -10,7 +10,6 @@ window.addEventListener('DOMContentLoaded', () => {
 	console.log('chord: ', chord)
 
 	// svg variable is placed using a div and class css selector
-	// const svg = d3.select('.stickmap')
 	const svg = d3.select('.stickmap')
 		.append('svg')
 		.attr('width', 400)
@@ -46,8 +45,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		.paddingInner(0.93)
 		.paddingOuter(0.2);
 
-	// find existing and append virtual rects to graph now, instead of svg, to incorporate graph grouping
-	// const rects = svg.selectAll('rect')
+	// find existing and append virtual rects to graph now, 
+	//   instead of svg, to incorporate graph grouping
 	// add data to rects
 	const rects = graph.selectAll('rect')
 		.data(data)
@@ -55,17 +54,12 @@ window.addEventListener('DOMContentLoaded', () => {
 	// bind existing rects to graph, instead of svg, to incorporate graph grouping
 	rects.append('rect')
 		.attr('width', x.bandwidth)
-		// .attr('height', d => graphHeight - y(27))
-		// .attr('height', graphHeight - y(27))
-		.attr('height', graphHeight)
+		.attr('height', d => graphHeight - y(27))
 		.attr('fill', 'red')
 		.attr('stroke', 'red')
 		.attr('x', (d, i) => x(i))
 		.attr('y', d => y(27));
 
-
-	console.log('Selection rects: ', rects)
-	// debugger;
 	rects.enter()
 		.append('rect')
 		.attr('width', x.bandwidth)
@@ -78,12 +72,28 @@ window.addEventListener('DOMContentLoaded', () => {
 	console.log('EnterSelection rects: ', rects)
 	// add a hard coded circle to display
 	svg.append('circle')
-		.data(data)
-		.attr('r', 5)
-		.attr('cx', (d, i) => i + 80)
-		.attr('cy', (d, i) => i + 400)
-		.attr('fill', 'lightblue')
-		.attr('stroke', 'navy').append('circ')
+		.attr('r', 10)
+		.attr('cx', (d, i) => x.bandwidth() + 40)
+		.attr('cy', d => 400)
+		.attr('fill', 'green')
+		.attr('stroke', 'yellow')
+		.attr('stroke-width', 3)
+
+	svg.append('circle')
+		.attr('r', 10)
+		.attr('cx', (d, i) => (x.bandwidth() * 2) + 60)
+		.attr('cy', d => 300)
+		.attr('fill', 'red')
+		.attr('stroke', 'yellow')
+		.attr('stroke-width', 3)
+
+	svg.append('circle')
+		.attr('r', 10)
+		.attr('cx', (d, i) => (x.bandwidth() * 2) + 80)
+		.attr('cy', d => 200)
+		.attr('fill', 'blue')
+		.attr('stroke', 'yellow')
+		.attr('stroke-width', 3)
 
 	// create and call the axes
 	const xAxis = d3.axisBottom(x)

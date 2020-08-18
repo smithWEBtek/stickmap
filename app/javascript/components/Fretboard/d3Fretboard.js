@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import { fretboardData } from '../../components/fretboardData/fretboardData'
 import { cmajor } from '../../components/fretboardData/fretboardData'
+import './Fretboard.css'
 
 window.addEventListener('DOMContentLoaded', () => {
 
@@ -58,7 +59,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		.attr('fill', 'red')
 		.attr('stroke', 'red')
 		.attr('x', (d, i) => x(i))
-		.attr('y', d => y(27));
+		.attr('y', d => y(27))
 
 	rects.enter()
 		.append('rect')
@@ -73,15 +74,15 @@ window.addEventListener('DOMContentLoaded', () => {
 	// add a hard coded circle to display
 	svg.append('circle')
 		.attr('r', 10)
-		.attr('cx', (d, i) => x.bandwidth() + 40)
-		.attr('cy', d => 400)
+		.attr('cx', margin.left + 41)
+		.attr('cy', 400)
 		.attr('fill', 'green')
 		.attr('stroke', 'yellow')
 		.attr('stroke-width', 3)
 
 	svg.append('circle')
 		.attr('r', 10)
-		.attr('cx', (d, i) => (x.bandwidth() * 2) + 60)
+		.attr('cx', margin.left + 76)
 		.attr('cy', d => 300)
 		.attr('fill', 'red')
 		.attr('stroke', 'yellow')
@@ -89,7 +90,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	svg.append('circle')
 		.attr('r', 10)
-		.attr('cx', (d, i) => (x.bandwidth() * 2) + 80)
+		.attr('cx', margin.left + 111)
 		.attr('cy', d => 200)
 		.attr('fill', 'blue')
 		.attr('stroke', 'yellow')

@@ -13,3 +13,13 @@
   margin: 0;
   line-height: .7;
 }
+
+.grid .tick {
+  stroke: rgb(241, 8, 8);
+  height: 5px;
+  opacity: 0.7;
+}
+
+.grid path {
+  stroke-width: 0;
+}
